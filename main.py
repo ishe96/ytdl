@@ -1,16 +1,22 @@
-from pytube import YouTube
+import tkinter as tk
+from tkinter import filedialog
+import pytube
 
-def Download(link):
-    youtubeObj = YouTube(link)
-    youtubeObj = youtubeObj.streams.get_highest_resolution()
 
-    try:
-        youtubeObj.download()
-    except:
-        print("Sorry, download failed")
+def select_download_path():
+    root = tk.Tk()
+    root.withdraw()
+    file_path = filedialog.askdirectory(parent=root, title='Please select a download path')
+    return file_path
 
-    print("Success, download is in progress")
 
-link = input("Paste url link here : ")
+def download_video(url, download_path):
+    yt = pytube.YouTube(url)
+    video = yt.streams.first()
+    video.download(download_path)
+    print(f'Video downloaded to {download_path}')
 
-Download(link)
+
+url = input('Enter the YouTube URL: ')
+download_path = select_download_path()
+download_video(url, download_path)
